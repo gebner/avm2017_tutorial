@@ -1,6 +1,6 @@
 [package]
 name = "avm2017_tutorial"
 version = "0.1"
-lean_version = "master"
+lean_version = "3.3.0"
 
 [dependencies]
