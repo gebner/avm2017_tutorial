@@ -26,6 +26,10 @@ by induction xs generalizing ys; simp *
 lemma reverse_reverse {α : Type u} (xs : list α) : xs.reverse.reverse = xs :=
 by induction xs; simp *
 
+example {α : Type u} (xs ys : list α) :
+    (xs.reverse ++ ys).reverse = ys.reverse ++ xs :=
+by simp
+
 @[simp]
 lemma map_reverse {α : Type u} {β : Type v} (f : α → β) (xs : list α) :
     list.map f (list.reverse xs) = list.reverse (list.map f xs) :=
@@ -47,3 +51,10 @@ example (xs : list ℕ) :
      list.map (λ x, x + 2) xs)
     = xs :=
 by simp [(∘)]
+
+-- What lemmas do we need to add to prove the following?
+example (xs : list ℕ) :
+    let xs := xs.filter (λ x, x > 0) in
+    let xs := xs.map (λ x, 3 * x / x) in
+    ∀ x ∈ xs, x = 3 :=
+by simp {contextual := tt}

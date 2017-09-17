@@ -39,7 +39,7 @@ by constructor; trivial <|> refl
   Rewriting
 -/
 
-lemma p2 (f : ℕ → ℕ) (a b : ℕ) (h : f (1 * (0 + a)) = f b) : f a = f (0 + b) :=
+lemma p3 (f : ℕ → ℕ) (a b : ℕ) (h : f (1 * (0 + a)) = f b) : f a = f (0 + b) :=
 begin
 -- The `rw` tactic takes a (quantified) equation and rewrites the goal using it
   rw zero_add,
@@ -52,9 +52,30 @@ end
   Induction
 -/
 
-lemma p3 {α : Type} (xs ys : list α) : (xs.append ys).length = xs.length + ys.length :=
+lemma p4 {α : Type} (xs ys : list α) : (xs.append ys).length = xs.length + ys.length :=
 begin
   induction xs; unfold list.append list.length,
   {rw zero_add},
   {cc}, -- congruence closure modulo associativity-commutativity
+end
+
+/-
+  Tactics are Lean terms as well ("meta-programs")
+-/
+
+open tactic
+
+-- Meta-definitions can use general recursion and
+-- call to functions implemented in C++
+
+-- Tactics are written using the `tactic` monad:
+meta def tactic.interactive.intro_and_cases : tactic unit := do
+h ← intro `h,  -- `h is a name literal
+trace "intro_and_cases: ", trace_state, -- printf-style debugging is usually the easiest option
+cases h
+
+example (a b : Prop) : a ∧ b → a :=
+begin
+  intro_and_cases,
+  assumption,
 end

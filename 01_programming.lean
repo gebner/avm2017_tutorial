@@ -89,6 +89,13 @@ reverse xs -- xs needs to be a (list _) here, but it's a nested_list!
 #reduce λ n, nested_list string (n+1)
 -- This is called "definitional equality".
 
+-- We can of course write functions that return nested_list
+def n_singleton {α : Type u} : ∀ n, α → nested_list α n
+-- in the base case, the return type is (nested_list α 0) =def= α
+| 0     a := a
+-- in the step case, the return type is (list (nested_list α n))
+| (n+1) a := [n_singleton n a]
+
 /-
   Inductive types
 -/
@@ -107,7 +114,11 @@ inductive vector (α : Type u) : ℕ → Type u
 | nil : vector 0
 | cons {n : ℕ} (head : α) (tail : vector n) : vector (n+1)
 
+def vector.head {α} : ∀ {n}, vector α (n+1) → α
+| _ (vector.cons hd tl) := hd
+
 #check vector.cons 3 (vector.cons 4 (vector.nil ℕ))
+#eval vector.head $ vector.cons 3 (vector.cons 4 (vector.nil ℕ))
 
 /-
   Structures
@@ -117,14 +128,14 @@ structure point (α : Type u) :=
 (x : α)
 (y : α)
 
-def pt : point ℕ := { x := 1, y := 2 }
+def pt : point ℕ := { y := 1, x := 2 }
 
 #eval pt.y
 #eval point.y pt
 
 example : point ℕ := point.mk 1 2
 example : point ℕ := ⟨1, 2⟩
-example : point ℕ := { point . x := 1, y := 2 }
+example := { point . x := 1, y := 2 }
 example : point ℕ := { x := 1, y := 2 }
 
 example := { pt with x := 5 }

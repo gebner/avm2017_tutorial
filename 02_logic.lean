@@ -81,9 +81,11 @@ example {p : Prop} : p ∨ ¬ p :=
 classical.em p
 
 -- Classical logic implies that all propositions are decidable.
+-- If we mark `classical.prop_decidable` as a type-class instance,
+-- then if-then-else works on all propositions.
 local attribute [instance] classical.prop_decidable
 
 -- However we cannot execute definitions that use classical.prop_decidable to
 -- construct data, such definitions are then marked as "noncomputable".
-noncomputable def find_root (f : ℕ → ℕ) : ℕ :=
+noncomputable def find_zero (f : ℕ → ℕ) : ℕ :=
 if h : ∃ i, f i = 0 then classical.some h else 0
