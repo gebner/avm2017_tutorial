@@ -50,6 +50,13 @@ lemma p8 : ∀ n : ℕ, 0 ≤ n
   show 0 ≤ n+1, from le_trans h1 h2
 
 /-
+  Subtypes restrict types to a subset of values.
+-/
+def positive_nat := { n : ℕ // n > 0 }
+
+example : positive_nat := ⟨10, dec_trivial⟩
+
+/-
   There are two different kinds of "truth values":
    - Prop: types, erased at runtime
    - bool: inductive type with values tt/ff, computable
